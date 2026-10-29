@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watchlist · DeskCal</title>
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+<div class="page-wrapper">
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <main class="main-content">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Econ <span class="accent-word">Watchlist</span></h1>
+        <p class="page-sub">Set once. Ticked indicators show on the Economic calendar (and later on TRMNL).</p>
+      </div>
+    </div>
+
+    <div class="econ-tools">
+      <input class="input" id="w-search" placeholder="Search, e.g. CPI or PMI" style="width:260px;" autocomplete="off">
+      <label class="toggle"><span class="switch"><input type="checkbox" id="w-only"><span class="track"></span></span> Ticked only</label>
+      <span class="econ-updated" id="w-total"></span>
+    </div>
+
+    <div class="jump-row" id="w-jump"></div>
+    <div class="regions" id="w-regions"></div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js?v=4"></script>
+<script src="js/common.js?v=4"></script>
+<script src="js/data.js?v=4"></script>
+<script src="js/econ-watch.js?v=4"></script>
+</body>
+</html>

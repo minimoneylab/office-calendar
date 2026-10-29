@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bank holidays · DeskCal</title>
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+<div class="page-wrapper">
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <main class="main-content">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Bank <span class="accent-word">Holidays</span></h1>
+        <p class="page-sub">One panel per region. Add a date at the bottom of a year, click × to remove, or paste a whole list.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-label">Show on calendar and TRMNL</div>
+      <div class="country-chips" id="country-chips"></div>
+      <p class="hint" style="margin-top:10px;">Click to turn a region on or off. Turned-off regions are kept here, just not shown on the calendar.</p>
+    </div>
+
+    <div class="jump-row" id="jump-row"></div>
+
+    <div class="regions" id="regions"></div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js?v=4"></script>
+<script src="js/common.js?v=4"></script>
+<script src="js/data.js?v=4"></script>
+<script src="js/holidays.js?v=4"></script>
+</body>
+</html>

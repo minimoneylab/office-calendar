@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendar · DeskCal</title>
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+<div class="page-wrapper">
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <main class="main-content">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Team <span class="accent-word">Calendar</span></h1>
+        <p class="page-sub">Click any day to add leave, a biz trip or a half day.</p>
+      </div>
+      <div class="cal-toolbar">
+        <button class="btn-ghost" id="prev-btn" aria-label="Previous month"><i class="ti ti-chevron-left"></i></button>
+        <div class="month-label" id="month-label"></div>
+        <button class="btn-ghost" id="next-btn" aria-label="Next month"><i class="ti ti-chevron-right"></i></button>
+        <button class="btn-secondary" id="today-btn">Today</button>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="item"><b class="lg-code">L</b> Leave</span>
+      <span class="item"><b class="lg-code">Biz</b> Biz trip</span>
+      <span class="item"><b class="lg-code">AM</b> / <b class="lg-code">PM</b> Half day off</span>
+      <span class="item"><span class="hol">HK</span> Bank holiday</span>
+      <span class="item" style="color:var(--text-light);">Colours are per person — set them on the Team page.</span>
+    </div>
+
+    <div class="cal" id="cal">
+      <div class="cal-head"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div></div>
+      <div id="cal-body"></div>
+    </div>
+
+    <div class="card hol-list">
+      <div class="section-label" id="hol-list-title">Bank holidays this month</div>
+      <div id="hol-list"></div>
+    </div>
+  </main>
+</div>
+
+<!-- Day modal -->
+<div class="overlay" id="day-overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="day-title">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="day-title"></div>
+        <div class="modal-sub" id="day-sub"></div>
+      </div>
+      <button class="icon-btn neutral" id="day-close" aria-label="Close"><i class="ti ti-x"></i></button>
+    </div>
+
+    <div class="modal-section" id="day-hols-section">
+      <div class="section-label">Bank holidays</div>
+      <div id="day-hols"></div>
+    </div>
+
+    <div class="modal-section">
+      <div class="section-label">Who's out</div>
+      <div id="day-entries"></div>
+    </div>
+
+    <div class="modal-section">
+      <div class="section-label">Add</div>
+      <div class="form-grid">
+        <div class="field full">
+          <label for="add-member">Who</label>
+          <select class="input" id="add-member"></select>
+        </div>
+        <div class="field full">
+          <label>Type</label>
+          <div class="seg" id="add-code"></div>
+        </div>
+        <div class="field" id="until-field">
+          <label for="add-until">Until (inclusive)</label>
+          <input type="date" class="input" id="add-until">
+        </div>
+        <div class="field" style="justify-content:flex-end;">
+          <div class="hint" id="add-days-hint"></div>
+        </div>
+      </div>
+      <div class="err" id="add-err"></div>
+      <div class="modal-actions">
+        <button class="btn-secondary" id="day-cancel">Close</button>
+        <button class="btn-primary" id="add-btn"><i class="ti ti-plus"></i>Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js?v=4"></script>
+<script src="js/common.js?v=4"></script>
+<script src="js/data.js?v=4"></script>
+<script src="js/calendar.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team · DeskCal</title>
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+<div class="page-wrapper">
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <main class="main-content">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">The <span class="accent-word">Team</span></h1>
+        <p class="page-sub">Add or remove people, confirm the short name, and pick each person's colour.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-label">Add a person</div>
+      <div class="form-row">
+        <div class="field" style="flex:2;min-width:200px;">
+          <label for="new-full">Full name</label>
+          <input class="input" id="new-full" placeholder="Christopher Yip" autocomplete="off">
+        </div>
+        <div class="field" style="flex:1;min-width:140px;">
+          <label for="new-short">Short name (max 10)</label>
+          <input class="input" id="new-short" placeholder="Chris" maxlength="10" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Preview</label>
+          <div style="height:36px;display:flex;align-items:center;"><span class="pill" id="new-preview">Chris <b>L</b></span></div>
+        </div>
+        <button class="btn-primary" id="add-member-btn"><i class="ti ti-user-plus"></i>Add</button>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Colour</label>
+        <div class="swatches" id="new-swatches"></div>
+      </div>
+      <div class="err" id="add-err"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-label" id="member-count">Members</div>
+      <table class="member-table">
+        <thead>
+          <tr>
+            <th style="width:44px;"></th>
+            <th>Full name</th>
+            <th>Short name</th>
+            <th>Colour</th>
+            <th>Shows as</th>
+            <th style="width:70px;">Active</th>
+            <th style="width:120px;"></th>
+          </tr>
+        </thead>
+        <tbody id="member-body"></tbody>
+      </table>
+      <p class="hint" style="margin-top:14px;">Turning someone off hides them from the "Who" list but keeps their past entries. Deleting removes them and all their entries.</p>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js?v=4"></script>
+<script src="js/common.js?v=4"></script>
+<script src="js/data.js?v=4"></script>
+<script src="js/team.js?v=4"></script>
+</body>
+</html>

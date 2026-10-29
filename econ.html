@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economic calendar · DeskCal</title>
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+<div class="page-wrapper">
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <main class="main-content">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Economic <span class="accent-word">Calendar</span></h1>
+        <p class="page-sub" id="econ-sub">Times in Hong Kong time. Data from TradingView, refreshed every 30 minutes.</p>
+      </div>
+      <div class="seg" id="range-seg">
+        <button type="button" data-range="last">Last week</button>
+        <button type="button" data-range="today">Today</button>
+        <button type="button" data-range="week" class="on">This week</button>
+        <button type="button" data-range="next">Next week</button>
+      </div>
+    </div>
+
+    <div class="econ-tools">
+      <label class="toggle"><span class="switch"><input type="checkbox" id="watch-only" checked><span class="track"></span></span> Watchlist only</label>
+      <div class="region-filter" id="region-filter"></div>
+      <span class="econ-updated" id="econ-updated"></span>
+    </div>
+
+    <div class="card econ-card">
+      <table class="econ-table">
+        <thead>
+          <tr>
+            <th class="c-time">Time</th>
+            <th class="c-reg">Region</th>
+            <th>Event</th>
+            <th class="c-num">Actual</th>
+            <th class="c-num">Forecast</th>
+            <th class="c-num">Previous</th>
+            <th class="c-star"></th>
+          </tr>
+        </thead>
+        <tbody id="econ-body"></tbody>
+      </table>
+    </div>
+    <p class="hint" style="margin-top:10px;">Actual in green / red = above / below forecast. ☆ adds or removes an indicator from the watchlist. S&amp;P Global PMIs show the date only (TradingView doesn't carry their numbers) — check Bloomberg.</p>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js?v=4"></script>
+<script src="js/common.js?v=4"></script>
+<script src="js/data.js?v=4"></script>
+<script src="js/econ.js?v=4"></script>
+</body>
+</html>
