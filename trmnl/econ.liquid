@@ -1,0 +1,61 @@
+<style>
+  .de { flex: 1 1 auto; display: flex; flex-direction: column; padding: 10px 14px 4px; color: #000; background: #fff;
+        font-family: "Inter", "Helvetica Neue", Arial, sans-serif; overflow: hidden; }
+  .de-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+  .de-title { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
+  .de-now { font-size: 14px; font-weight: 700; }
+  .de-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 15px; }
+  .de-table th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-align: left;
+                 border-bottom: 2px solid #000; padding: 0 4px 2px; }
+  .de-table td { padding: 0 4px; height: 22px; line-height: 22px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .de-table .n { text-align: right; font-variant-numeric: tabular-nums; }
+  .de-time { width: 50px; font-variant-numeric: tabular-nums; }
+  .de-rg { width: 40px; }
+  .de-a { width: 86px; } .de-f { width: 74px; } .de-p { width: 74px; }
+  .de-tag { display: inline-block; border: 1.5px solid #000; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+            padding: 0 3px; line-height: 14px; border-radius: 2px; }
+  .de-per { font-size: 12px; margin-left: 4px; }
+  .de-day td { font-size: 13px; font-weight: 700; height: 20px; line-height: 20px; border-bottom: 1px solid #000; padding-top: 2px; }
+  .de-day.today td span { background: #000; color: #fff; padding: 0 6px; border-radius: 2px; }
+  .de-ev.past td { }
+  .de-ev .de-act { font-weight: 800; }
+  .de-ev.next td { border-top: 3px solid #000; }
+  .de-ev:not(.past) .de-ev-name { font-weight: 600; }
+  .de-empty { padding: 40px 0; text-align: center; font-size: 16px; }
+</style>
+
+<div class="de">
+  <div class="de-head">
+    <div class="de-title">Economic calendar</div>
+    <div class="de-now">Now {{ now }} HKT</div>
+  </div>
+  {% if lines.size == 0 %}
+    <div class="de-empty">No watchlist releases coming up.</div>
+  {% else %}
+  <table class="de-table">
+    <colgroup><col class="de-time"><col class="de-rg"><col><col class="de-a"><col class="de-f"><col class="de-p"></colgroup>
+    <thead><tr><th>HKT</th><th></th><th>Event</th><th class="n">Actual</th><th class="n">Fcst</th><th class="n">Prev</th></tr></thead>
+    <tbody>
+    {% for l in lines %}
+      {% if l.kind == "day" %}
+        <tr class="de-day{% if l.today %} today{% endif %}"><td colspan="6"><span>{% if l.today %}Today · {% endif %}{{ l.label }}</span></td></tr>
+      {% else %}
+        <tr class="de-ev{% if l.past %} past{% endif %}{% if l.next %} next{% endif %}">
+          <td>{{ l.time }}</td>
+          <td><span class="de-tag">{{ l.region }}</span></td>
+          <td><span class="de-ev-name">{{ l.event }}</span>{% if l.period != "" %}<span class="de-per">{{ l.period }}</span>{% endif %}</td>
+          <td class="n de-act">{{ l.actual }}{% if l.dir == "up" %} ▲{% elsif l.dir == "down" %} ▼{% endif %}</td>
+          <td class="n">{{ l.forecast }}</td>
+          <td class="n">{{ l.previous }}</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+
+<div class="title_bar">
+  <span class="title">Watchlist releases</span>
+  <span class="instance">{% if more > 0 %}{{ more }} more in next 7 days · {% endif %}Data {{ updated }}</span>
+</div>

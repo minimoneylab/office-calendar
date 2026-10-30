@@ -1,0 +1,52 @@
+<style>
+  .dc { flex: 1 1 auto; display: flex; flex-direction: column; padding: 10px 14px 6px; color: #000; background: #fff;
+        font-family: "Inter", "Helvetica Neue", Arial, sans-serif; overflow: hidden; }
+  .dc-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+  .dc-title { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
+  .dc-legend { font-size: 13px; }
+  .dc-legend b { font-weight: 700; }
+  .dc-tag { display: inline-block; background: #000; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+            padding: 0 3px; line-height: 15px; border-radius: 2px; }
+  .dc-dow { display: grid; grid-template-columns: repeat(5, 1fr); font-size: 12px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; border-bottom: 2px solid #000; padding: 0 0 2px 4px; }
+  .dc-grid { flex: 1 1 auto; display: grid; grid-template-columns: repeat(5, 1fr); border-left: 1px solid #000; }
+  .dc-cell { border-right: 1px solid #000; border-bottom: 1px solid #000; padding: 2px 4px 2px 5px; overflow: hidden; min-width: 0; }
+  .dc-top { display: flex; flex-wrap: wrap; gap: 3px; align-items: center; margin-bottom: 1px; }
+  .dc-d { font-size: 15px; font-weight: 700; min-width: 20px; line-height: 18px; }
+  .dc-today .dc-d { background: #000; color: #fff; border-radius: 9px; text-align: center; padding: 0 4px; }
+  .dc-today { box-shadow: inset 0 0 0 2px #000; }
+  .dc-items { font-size: 14px; line-height: 16px; }
+  .dc-items span { white-space: nowrap; margin-right: 7px; display: inline-block; }
+  .dc-items span b { font-weight: 700; }
+  .dc-dense .dc-items { font-size: 12px; line-height: 13px; }
+  .dc-dense .dc-items span { margin-right: 5px; }
+  .dc-out { background-image: repeating-linear-gradient(45deg, #000 0 1px, transparent 1px 7px); }
+  .dc-out .dc-d, .dc-out .dc-top, .dc-out .dc-items { visibility: hidden; }
+</style>
+
+<div class="dc">
+  <div class="dc-head">
+    <div class="dc-title">{{ title }}</div>
+    <div class="dc-legend"><b>L</b> leave &nbsp; <b>Biz</b> trip &nbsp; <b>AM</b>/<b>PM</b> half day &nbsp; <span class="dc-tag">HK</span> bank holiday</div>
+  </div>
+  <div class="dc-dow"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div></div>
+  <div class="dc-grid" style="grid-template-rows: repeat({{ n_weeks }}, 1fr);">
+    {% for week in weeks %}{% for day in week.days %}
+      {% assign load = day.n | plus: day.hols.size %}
+      <div class="dc-cell{% if day.out %} dc-out{% endif %}{% if day.today %} dc-today{% endif %}{% if load > 6 %} dc-dense{% endif %}">
+        <div class="dc-top">
+          <span class="dc-d">{{ day.d }}</span>
+          {% for h in day.hols %}<span class="dc-tag">{{ h }}</span>{% endfor %}
+        </div>
+        <div class="dc-items">
+          {% for it in day.items %}{% assign parts = it | split: " " %}<span>{{ parts[0] }} <b>{{ parts[1] }}</b></span>{% endfor %}
+        </div>
+      </div>
+    {% endfor %}{% endfor %}
+  </div>
+</div>
+
+<div class="title_bar">
+  <span class="title">Team leave</span>
+  <span class="instance">Updated {{ updated }}</span>
+</div>

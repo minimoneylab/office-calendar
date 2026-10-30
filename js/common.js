@@ -129,6 +129,7 @@ function renderSidebar(active) {
         ['econ-watch.html', 'watch', 'ti-star', 'Watchlist'],
         ['team.html', 'team', 'ti-users', 'Team'],
         ['holidays.html', 'holidays', 'ti-world', 'Bank holidays'],
+        ['trmnl.html', 'trmnl', 'ti-device-tablet', 'TRMNL'],
     ];
     document.getElementById('sidebar').innerHTML = `
         <div class="sidebar-header">

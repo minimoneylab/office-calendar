@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRMNL · DeskCal</title>
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="css/style.css?v=5">
+<style>
+  .t-tabs { margin-bottom: 16px; }
+  .t-stage { background: #3a3a36; border-radius: 18px; padding: 22px; display: inline-block; max-width: 100%; overflow: auto; }
+  .t-screen { width: 800px; height: 480px; background: #fff; overflow: hidden; position: relative; }
+  .t-screen.onebit { filter: grayscale(1) contrast(4); }
+  .t-screen .view { width: 800px; height: 480px; display: flex; flex-direction: column; }
+  .t-screen .title_bar { flex: 0 0 40px; display: flex; align-items: center; gap: 10px; padding: 0 14px; border-top: 2px solid #000;
+                         font-family: Inter, Arial, sans-serif; color: #000; background: #fff; }
+  .t-screen .title_bar .title { font-weight: 700; font-size: 16px; }
+  .t-screen .title_bar .instance { margin-left: auto; font-size: 14px; }
+  .t-setup { margin-top: 18px; }
+  .t-setup .row { display: grid; grid-template-columns: 150px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px dashed var(--border-soft); }
+  .t-setup .row:last-child { border-bottom: none; }
+  .t-setup .k { font-size: 0.8rem; color: var(--text-mid); font-weight: 600; }
+  .t-setup code { font-size: 0.8rem; background: #F5F4EE; border-radius: 6px; padding: 5px 8px; overflow-wrap: anywhere; display: block; }
+  .t-note { font-size: 0.8rem; color: var(--text-light); margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <main class="main-content">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">TRMNL <span class="accent-word">Preview</span></h1>
+        <p class="page-sub">Exactly what the e-ink screen will show, using live data and the same templates.</p>
+      </div>
+      <label class="toggle"><span class="switch"><input type="checkbox" id="onebit" checked><span class="track"></span></span> Black &amp; white like e-ink</label>
+    </div>
+
+    <div class="seg t-tabs" id="t-tabs">
+      <button type="button" data-v="roster0" class="on">Team leave · this month</button>
+      <button type="button" data-v="roster1">Team leave · next month</button>
+      <button type="button" data-v="econ">Economic calendar</button>
+    </div>
+
+    <div><div class="t-stage"><div class="t-screen onebit" id="t-screen"><div class="view view--full" id="t-view"></div></div></div></div>
+    <div class="err" id="t-err"></div>
+
+    <div class="card t-setup">
+      <div class="section-label">TRMNL private plugin settings for this screen</div>
+      <div class="row"><span class="k">Strategy</span><code>Polling</code><span></span></div>
+      <div class="row"><span class="k">Polling URL</span><code id="t-url"></code><button class="btn-secondary" data-copy="t-url"><i class="ti ti-copy"></i>Copy</button></div>
+      <div class="row"><span class="k">Polling headers</span><code id="t-head"></code><button class="btn-secondary" data-copy="t-head"><i class="ti ti-copy"></i>Copy</button></div>
+      <div class="row"><span class="k">Markup (Full)</span><code id="t-file"></code><button class="btn-secondary" id="t-copy-markup"><i class="ti ti-copy"></i>Copy markup</button></div>
+      <p class="t-note">The publishable key is the same one the website already uses — safe to paste into TRMNL. Never paste the secret key.</p>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/liquidjs@10.16.1/dist/liquid.browser.min.js"></script>
+<script src="js/supabase-client.js?v=5"></script>
+<script src="js/common.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script src="js/trmnl.js?v=5"></script>
+</body>
+</html>
