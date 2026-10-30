@@ -34,8 +34,12 @@ async function getData(v) {
 async function show() {
     const v = VIEWS[current];
     document.querySelectorAll('#t-tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === current));
-    document.getElementById('t-url').textContent = `${DB.demo ? 'https://<project>.supabase.co' : SUPABASE_URL}/rest/v1/rpc/${v.fn}${v.query}`;
-    document.getElementById('t-head').textContent = `apikey=${DB.demo ? '<publishable key>' : SUPABASE_KEY}`;
+    // TRMNL needs the key in the URL and an uncompressed response (Supabase's gzip/brotli
+    // reply showed up in TRMNL as "Malformed JSON").
+    const base = DB.demo ? 'https://<project>.supabase.co' : SUPABASE_URL;
+    const key = DB.demo ? '<publishable key>' : SUPABASE_KEY;
+    document.getElementById('t-url').textContent = `${base}/rest/v1/rpc/${v.fn}${v.query}${v.query ? '&' : '?'}apikey=${key}`;
+    document.getElementById('t-head').textContent = 'accept-encoding=identity';
     document.getElementById('t-file').textContent = v.tpl;
     const err = document.getElementById('t-err');
     err.textContent = '';
