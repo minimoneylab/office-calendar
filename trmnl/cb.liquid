@@ -1,0 +1,57 @@
+<style>
+  .cb { flex: 1 1 auto; display: flex; flex-direction: column; padding: 8px 12px 2px; color: #000; background: #fff;
+        font-family: "Inter", "Helvetica Neue", Arial, sans-serif; overflow: hidden; }
+  .cb-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 3px; }
+  .cb-title { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
+  .cb-key { font-size: 11px; }
+  .cb-grid { flex: 1 1 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+  .cb-panel { display: flex; flex-direction: column; min-width: 0; }
+  .cb-panel h4 { margin: 0 0 1px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+                 border-bottom: 2px solid #000; padding-bottom: 1px; }
+  .cb-card { flex: 1 1 0; border-bottom: 1px solid #000; padding: 2px 3px; display: flex; flex-direction: column;
+             justify-content: center; min-height: 0; overflow: hidden; }
+  .cb-r1 { display: flex; align-items: baseline; gap: 5px; white-space: nowrap; line-height: 18px; }
+  .cb-name { font-weight: 800; font-size: 14px; width: 40px; flex: 0 0 40px; }
+  .cb-rate { font-weight: 800; font-size: 16px; }
+  .cb-rn { font-size: 11px; }
+  .cb-next { margin-left: auto; font-size: 12px; }
+  .cb-next b { font-weight: 800; }
+  .cb-exp { font-size: 11px; font-weight: 700; border: 1.5px solid currentColor; border-radius: 2px; padding: 0 3px; margin-left: 3px; }
+  .cb-r2 { font-size: 11.5px; line-height: 15px; margin-left: 45px; white-space: nowrap; overflow: hidden; }
+  .cb-r2 span { margin-right: 9px; }
+  .cb-soon { background: #000; color: #fff; border-bottom-color: #fff; }
+  .cb-empty { font-size: 13px; padding: 8px 2px; }
+</style>
+
+<div class="cb">
+  <div class="cb-head">
+    <div class="cb-title">Central banks</div>
+    <div class="cb-key">Policy rate % · next meeting · <b>exp</b> = consensus vs now · last 3 decisions (bp)</div>
+  </div>
+  <div class="cb-grid">
+    {% assign panels = "g10,asia" | split: "," %}
+    {% for side in panels %}
+      {% if side == "g10" %}{% assign banks = g10 %}{% assign label = "G10" %}{% else %}{% assign banks = asia %}{% assign label = "Asia / EM" %}{% endif %}
+      <div class="cb-panel">
+        <h4>{{ label }}</h4>
+        {% if banks.size == 0 %}<div class="cb-empty">None selected</div>{% endif %}
+        {% for b in banks %}
+          <div class="cb-card{% if b.soon %} cb-soon{% endif %}">
+            <div class="cb-r1">
+              <span class="cb-name">{{ b.cb }}</span>
+              <span class="cb-rate">{{ b.rate }}</span>
+              <span class="cb-rn">{{ b.rate_name }}</span>
+              <span class="cb-next">{% if b.days == 0 %}<b>Today</b>{% else %}Next <b>{{ b.next }}</b>{% if b.days %} · {{ b.days }}d{% endif %}{% endif %}{% if b.exp != "" %}<span class="cb-exp">{{ b.exp }}</span>{% endif %}</span>
+            </div>
+            <div class="cb-r2">{% for h in b.hist %}<span>{{ h.d }} {{ h.c }}</span>{% endfor %}</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="title_bar">
+  <span class="title">Policy rates</span>
+  <span class="instance">Updated {{ updated }}</span>
+</div>

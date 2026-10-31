@@ -127,6 +127,7 @@ function renderSidebar(active) {
         ['index.html', 'calendar', 'ti-calendar-month', 'Team calendar'],
         ['econ.html', 'econ', 'ti-chart-line', 'Economic calendar'],
         ['econ-watch.html', 'watch', 'ti-star', 'Watchlist'],
+        ['central-banks.html', 'cb', 'ti-building-bank', 'Central banks'],
         ['team.html', 'team', 'ti-users', 'Team'],
         ['holidays.html', 'holidays', 'ti-world', 'Bank holidays'],
         ['trmnl.html', 'trmnl', 'ti-device-tablet', 'TRMNL'],

@@ -7,6 +7,7 @@ const VIEWS = {
     roster0: { fn: 'trmnl_roster', args: {},                  query: '',                 tpl: 'trmnl/roster.liquid' },
     roster1: { fn: 'trmnl_roster', args: { month_offset: 1 }, query: '?month_offset=1',  tpl: 'trmnl/roster.liquid' },
     econ:    { fn: 'trmnl_econ',   args: {},                  query: '',                 tpl: 'trmnl/econ.liquid' },
+    cb:      { fn: 'trmnl_cb',     args: {},                  query: '',                 tpl: 'trmnl/cb.liquid' },
 };
 const engine = new liquidjs.Liquid();
 const tplCache = {};

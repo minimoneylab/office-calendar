@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central banks · DeskCal</title>
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="css/style.css?v=5">
+<style>
+  .cbw-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+  .cbw-panel h3 { font-size: 0.75rem; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 10px; }
+  .cbw-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
+  .cbw-card.off { opacity: 0.5; }
+  .cbw-card.soon { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+  .cbw-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .cbw-name { font-weight: 800; font-size: 1rem; min-width: 44px; }
+  .cbw-rate { font-weight: 800; font-size: 1.35rem; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  .cbw-rn { font-size: 0.8rem; color: var(--text-mid); }
+  .cbw-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .cbw-next { font-size: 0.85rem; color: var(--text-mid); white-space: nowrap; }
+  .cbw-next b { color: var(--text); }
+  .cbw-exp { font-size: 0.75rem; font-weight: 700; border: 1px solid var(--border); border-radius: 6px; padding: 1px 6px; color: var(--text); }
+  .cbw-hist { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .cbw-hist span { font-size: 0.78rem; background: #F5F4EE; border-radius: 6px; padding: 2px 8px; color: var(--text-mid); font-variant-numeric: tabular-nums; }
+  .cbw-hist b { color: var(--text); font-weight: 600; }
+  .cbw-edit { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-soft); font-size: 0.78rem; color: var(--text-mid); flex-wrap: wrap; }
+  .cbw-edit .input { padding: 4px 8px; font-size: 0.8rem; }
+  .cbw-manual { font-size: 0.68rem; font-weight: 700; color: var(--warn); border: 1px solid var(--warn); border-radius: 4px; padding: 0 4px; }
+  .cbw-msg { color: var(--text-mid); font-size: 0.9rem; padding: 30px 0; }
+  @media (max-width: 960px) { .cbw-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <main class="main-content">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Central <span class="accent-word">Banks</span></h1>
+        <p class="page-sub">Policy rates, next meeting and the last three decisions. Switch a bank off to hide it on TRMNL.</p>
+      </div>
+      <span class="econ-updated" id="cbw-updated"></span>
+    </div>
+    <div id="cbw-body" class="cbw-grid"></div>
+    <p class="hint" style="margin-top:6px;">Changes in basis points. "Exp" = TradingView consensus for the next meeting vs today's rate (blank when there's no forecast).
+      If a next meeting is missing or wrong, set it by hand — it's used until that date passes.</p>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js?v=6"></script>
+<script src="js/common.js?v=6"></script>
+<script src="js/data.js?v=6"></script>
+<script src="js/central-banks.js?v=6"></script>
+</body>
+</html>

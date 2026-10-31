@@ -1,0 +1,27 @@
+name: Central bank history fetch
+
+on:
+  schedule:
+    - cron: "23 21 * * *"      # daily 05:23 HKT
+  workflow_dispatch:           # "Run workflow" button
+
+concurrency:
+  group: cb-fetch
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Fetch rate decisions → Supabase
+        working-directory: scripts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: python fetch_cb.py
