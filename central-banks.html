@@ -30,6 +30,23 @@
   .cbw-edit .input { padding: 4px 8px; font-size: 0.8rem; }
   .cbw-manual { font-size: 0.68rem; font-weight: 700; color: var(--warn); border: 1px solid var(--warn); border-radius: 4px; padding: 0 4px; }
   .cbw-msg { color: var(--text-mid); font-size: 0.9rem; padding: 30px 0; }
+  .cbw-toggle { padding: 4px 8px; font-size: 0.78rem; gap: 5px; }
+  .cbw-warn { color: var(--warn); font-weight: 600; }
+  .cbw-sched { margin-top: 8px; background: #FBFBF7; border: 1px solid var(--border-soft); border-radius: 10px; padding: 10px; }
+  .cbw-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .cbw-chip { display: inline-flex; align-items: center; gap: 2px; font-size: 0.78rem; background: var(--card); border: 1px solid var(--border);
+              border-radius: 6px; padding: 2px 2px 2px 8px; font-variant-numeric: tabular-nums; }
+  .cbw-chip.tent { border-style: dashed; color: var(--text-mid); }
+  .cbw-chip button { border: none; background: none; cursor: pointer; color: #B9B8B0; padding: 0 4px; border-radius: 4px; font-size: 0.85rem; line-height: 1.2; }
+  .cbw-chip button:hover { color: var(--accent); background: var(--accent-soft); }
+  .cbw-chip button[data-act="del"]:hover { color: var(--danger); background: #FBEDEB; }
+  .cbw-none { font-size: 0.8rem; color: var(--text-light); }
+  .cbw-add { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+  .cbw-add .input { padding: 5px 8px; font-size: 0.8rem; }
+  .cbw-add textarea.input { flex: 1; min-width: 160px; height: 31px; resize: vertical; font-family: inherit; }
+  .cbw-add .btn-secondary { padding: 5px 10px; font-size: 0.78rem; }
+  .cbw-or { font-size: 0.75rem; color: var(--text-light); }
+  .cbw-note { font-size: 0.72rem; color: var(--text-light); margin-top: 8px; }
   @media (max-width: 960px) { .cbw-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -47,7 +64,7 @@
     </div>
     <div id="cbw-body" class="cbw-grid"></div>
     <p class="hint" style="margin-top:6px;">Changes in basis points. "Exp" = TradingView consensus for the next meeting vs today's rate (blank when there's no forecast).
-      If a next meeting is missing or wrong, set it by hand — it's used until that date passes.</p>
+      TradingView only lists meetings about 5 weeks ahead, so each bank also keeps a schedule — open "Schedule" on a card to add, paste or remove dates.</p>
   </main>
 </div>
 
@@ -55,6 +72,6 @@
 <script src="js/supabase-client.js?v=6"></script>
 <script src="js/common.js?v=6"></script>
 <script src="js/data.js?v=6"></script>
-<script src="js/central-banks.js?v=6"></script>
+<script src="js/central-banks.js?v=7"></script>
 </body>
 </html>
