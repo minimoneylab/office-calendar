@@ -13,6 +13,7 @@ const state = {
     entries: [],                    // entries in the visible grid
     wide: [],                       // entries ±6 months around the open day (for periods)
     holidays: [],
+    notes: [],
     visible: COUNTRY_CODES.slice(),
     dayOpen: null,                  // 'YYYY-MM-DD' of the open modal
     addCode: 'L',
@@ -21,6 +22,33 @@ const state = {
 
 const memberById = id => state.members.find(m => m.id === id);
 const codeLabel = c => (CODES.find(x => x.code === c) || {}).label || c;
+
+// ---------- Day notes (Supabase table roster_notes; browser-only in demo mode) ----------
+const Notes = (() => {
+    if (!DB.demo) {
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const chk = ({ data, error }) => { if (error) throw error; return data; };
+        return {
+            list: async (from, to) => chk(await sb.from('roster_notes').select('*').gte('date', from).lte('date', to).order('date').order('id')),
+            add: async (date, text) => chk(await sb.from('roster_notes').insert({ date, text }).select().single()),
+            update: async (id, text) => {
+                const rows = chk(await sb.from('roster_notes').update({ text, updated_at: new Date().toISOString() }).eq('id', id).select());
+                if (!rows.length) throw new Error('Note was not saved — check RLS policies in Supabase');
+            },
+            remove: async (id) => chk(await sb.from('roster_notes').delete().eq('id', id)),
+        };
+    }
+    const KEY = 'deskcal_demo_notes';
+    const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } };
+    const write = v => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) { /* ignore */ } };
+    return {
+        list: async (from, to) => read().filter(n => n.date >= from && n.date <= to),
+        add: async (date, text) => { const all = read(); const n = { id: Date.now(), date, text }; all.push(n); write(all); return n; },
+        update: async (id, text) => { const all = read(); const n = all.find(x => x.id === id); if (n) n.text = text; write(all); },
+        remove: async (id) => write(read().filter(n => n.id !== id)),
+    };
+})();
+const notesOn = date => state.notes.filter(n => n.date === date);
 
 // ---------- Grid range: Monday of the first weekday → Friday of the last weekday ----------
 function gridRange(year, month) {
@@ -46,6 +74,12 @@ async function load() {
         state.visible = visible;
         if (state.dayOpen) await loadWide();
     } catch (e) { fail(e); }
+    try { state.notes = await Notes.list(ymd(start), ymd(end)); }
+    catch (e) {
+        state.notes = [];
+        if (/roster_notes|schema cache|relation/i.test(e.message || '')) toast('Notes need roster_migration_7.sql in Supabase', true);
+        else fail(e);
+    }
     render();
     if (state.dayOpen) renderDayModal();
 }
@@ -101,6 +135,7 @@ function render() {
                         ${holidaysOn(ds).map(h => `<span class="hol" title="${esc(COUNTRY_NAME[h.country] || h.country)}${h.name ? ' — ' + esc(h.name) : ''}">${esc(h.country)}</span>`).join('')}
                         <i class="ti ti-plus cell-add" aria-hidden="true"></i>
                     </div>
+                    ${notesOn(ds).map(n => `<div class="cell-note" title="${esc(n.text)}">${esc(n.text)}</div>`).join('')}
                     <div class="pills">
                         ${entriesOn(ds).map(e => pillHtml(memberById(e.member_id), e.code)).join('')}
                     </div>
@@ -164,6 +199,13 @@ function renderDayModal() {
     document.getElementById('day-hols-section').style.display = hols.length ? '' : 'none';
     document.getElementById('day-hols').innerHTML = `<div class="pills">${hols.map(h =>
         `<span style="display:inline-flex;gap:6px;align-items:center;margin-right:10px;"><span class="hol">${esc(h.country)}</span>${esc(COUNTRY_NAME[h.country])}</span>`).join('')}</div>`;
+
+    document.getElementById('day-notes').innerHTML = notesOn(date).map(n => `
+        <div class="note-line" data-id="${n.id}">
+            <i class="ti ti-pin" aria-hidden="true"></i>
+            <input class="input note-edit" value="${esc(n.text)}" maxlength="200" aria-label="Edit note">
+            <button class="icon-btn" data-act="note-del" aria-label="Delete note"><i class="ti ti-trash"></i></button>
+        </div>`).join('');
 
     document.getElementById('day-entries').innerHTML = ents.length
         ? ents.map(entryBlock).join('')
@@ -289,6 +331,39 @@ async function savePeriod(block, e) {
         await load();
     } catch (ex) { fail(ex); await load(); }
 }
+
+// ---------- Notes ----------
+async function addNote() {
+    const input = document.getElementById('note-new');
+    const text = input.value.trim();
+    if (!text) { input.focus(); return; }
+    try {
+        await Notes.add(state.dayOpen, text);
+        input.value = '';
+        toast('Note added');
+        await load();
+        document.getElementById('note-new').focus();
+    } catch (e) { fail(e); }
+}
+document.getElementById('note-add').addEventListener('click', addNote);
+document.getElementById('note-new').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addNote(); } });
+document.getElementById('day-notes').addEventListener('click', async e => {
+    if (!e.target.closest('[data-act="note-del"]')) return;
+    const id = Number(e.target.closest('.note-line').dataset.id);
+    try { await Notes.remove(id); toast('Note deleted'); await load(); } catch (err) { fail(err); }
+});
+document.getElementById('day-notes').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.matches('.note-edit')) e.target.blur();
+});
+document.getElementById('day-notes').addEventListener('focusout', async e => {
+    if (!e.target.matches('.note-edit')) return;
+    const id = Number(e.target.closest('.note-line').dataset.id);
+    const n = state.notes.find(x => x.id === id);
+    const text = e.target.value.trim();
+    if (!n || text === n.text) return;
+    if (!text) { e.target.value = n.text; toast('Use the bin to delete a note', true); return; }
+    try { await Notes.update(id, text); toast('Note saved'); await load(); } catch (err) { e.target.value = n.text; fail(err); }
+});
 
 // ---------- Events ----------
 document.getElementById('cal-body').addEventListener('click', e => {

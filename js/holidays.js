@@ -89,8 +89,13 @@ function buildPanels() {
                 <h3>${esc(name)}</h3>
                 <span class="vis-badge"></span>
                 <span class="region-spacer"></span>
+                <label class="check shade-check" title="Tint the whole day on the Team Calendar"><input type="checkbox" data-f="shade"> Shade whole day</label>
+                <button class="btn-ghost" data-act="toggle-color" title="Change ${esc(name)} colour"><span class="swatch-dot"></span>Colour</button>
                 <button class="btn-ghost" data-act="toggle-paste"><i class="ti ti-clipboard-text"></i>Paste dates</button>
                 <button class="btn-ghost" data-act="copy"><i class="ti ti-copy"></i>Copy</button>
+            </div>
+            <div class="color-box" hidden>
+                ${HOL_PALETTE.map(col => `<button class="swatch" data-color="${col}" style="background:${col}" aria-label="Colour ${col}"></button>`).join('')}
             </div>
             <div class="paste-box" hidden>
                 <textarea class="input" rows="4" placeholder="Paste ${esc(name)} dates in any common format, e.g.
@@ -134,6 +139,16 @@ function renderPanelBody(c) {
     }).join('');
 }
 
+// ---------- Colour + shade controls (saved by holcolors.js) ----------
+function renderColorControls(c) {
+    const panel = document.getElementById(`r-${c}`);
+    const col = HolColors.colorOf(c);
+    panel.querySelector('.swatch-dot').style.background = col;
+    panel.querySelectorAll('.swatch').forEach(b => b.classList.toggle('on', b.dataset.color === col));
+    panel.querySelector('[data-f="shade"]').checked = HolColors.shaded(c);
+}
+HolColors.loaded.then(() => COUNTRY_CODES.forEach(renderColorControls));
+
 // ---------- Panel actions ----------
 const regionsEl = document.getElementById('regions');
 
@@ -156,10 +171,23 @@ regionsEl.addEventListener('click', async e => {
         return;
     }
 
+    const sw = e.target.closest('.swatch');
+    if (sw) {
+        try {
+            await HolColors.setColor(c, sw.dataset.color);
+            renderColorControls(c);
+            toast(`${COUNTRY_NAME[c]} colour saved`);
+        } catch (err) { fail(err); }
+        return;
+    }
+
     const act = e.target.closest('[data-act]')?.dataset.act;
     if (!act) return;
 
-    if (act === 'add') {
+    if (act === 'toggle-color') {
+        const box = panel.querySelector('.color-box');
+        box.hidden = !box.hidden;
+    } else if (act === 'add') {
         const col = e.target.closest('.year-col');
         await addOne(c, col.querySelector('input[type=date]'));
     } else if (act === 'toggle-paste') {
@@ -200,6 +228,15 @@ async function addOne(c, input) {
 }
 
 async function reloadList() { hs.list = await DB.holidays(FROM, TO); }
+
+regionsEl.addEventListener('change', async e => {
+    if (!e.target.matches('[data-f="shade"]')) return;
+    const c = e.target.closest('.region').dataset.c;
+    try {
+        await HolColors.setShade(c, e.target.checked);
+        toast(`${COUNTRY_NAME[c]}: whole day ${e.target.checked ? 'shaded' : 'not shaded'} on calendar`);
+    } catch (err) { fail(err); e.target.checked = !e.target.checked; }
+});
 
 // paste preview
 regionsEl.addEventListener('input', e => {

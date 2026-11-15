@@ -8,7 +8,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/style.css?v=5">
+<style>
+  .cell-note { font-size: 0.72rem; font-weight: 600; color: var(--text); background: #FFF6D9; border-left: 3px solid #D9A400;
+               border-radius: 3px; padding: 1px 5px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .note-line { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .note-line .ti-pin { color: #D9A400; }
+  .note-line .note-edit { flex: 1; padding: 6px 8px; font-size: 0.875rem; }
+  .note-add { display: flex; gap: 6px; }
+  .note-add .input { flex: 1; }
+</style>
 </head>
 <body>
 <div class="page-wrapper">
@@ -18,7 +27,7 @@
     <div class="page-head">
       <div>
         <h1 class="page-title">Team <span class="accent-word">Calendar</span></h1>
-        <p class="page-sub">Click any day to add leave, a biz trip or a half day.</p>
+        <p class="page-sub">Click any day to add leave, a biz trip, a half day or a note.</p>
       </div>
       <div class="cal-toolbar">
         <button class="btn-ghost" id="prev-btn" aria-label="Previous month"><i class="ti ti-chevron-left"></i></button>
@@ -33,6 +42,7 @@
       <span class="item"><b class="lg-code">Biz</b> Biz trip</span>
       <span class="item"><b class="lg-code">AM</b> / <b class="lg-code">PM</b> Half day off</span>
       <span class="item"><span class="hol">HK</span> Bank holiday</span>
+      <span class="item"><span class="cell-note" style="display:inline-block;margin:0;">Note</span> Important item</span>
       <span class="item" style="color:var(--text-light);">Colours are per person — set them on the Team page.</span>
     </div>
 
@@ -62,6 +72,15 @@
     <div class="modal-section" id="day-hols-section">
       <div class="section-label">Bank holidays</div>
       <div id="day-hols"></div>
+    </div>
+
+    <div class="modal-section">
+      <div class="section-label">Notes</div>
+      <div id="day-notes"></div>
+      <div class="note-add">
+        <input class="input" id="note-new" maxlength="200" placeholder="e.g. Compliance training at 3:00pm">
+        <button class="btn-secondary" id="note-add"><i class="ti ti-plus"></i>Add note</button>
+      </div>
     </div>
 
     <div class="modal-section">
@@ -98,9 +117,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase-client.js?v=4"></script>
-<script src="js/common.js?v=4"></script>
-<script src="js/data.js?v=4"></script>
-<script src="js/calendar.js?v=4"></script>
+<script src="js/supabase-client.js?v=5"></script>
+<script src="js/common.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script src="js/holcolors.js?v=1"></script>
+<script src="js/calendar.js?v=6"></script>
 </body>
 </html>
