@@ -127,9 +127,12 @@ function render() {
         for (let i = 0; i < 5; i++) {
             const d = addDays(wk, i);
             const ds = ymd(d);
-            const out = d.getMonth() !== state.month;
+            if (d.getMonth() !== state.month) {          // other month: leave blank
+                html += `<div class="cell out" aria-hidden="true"></div>`;
+                continue;
+            }
             html += `
-                <div class="cell ${out ? 'out' : ''} ${ds === today ? 'today' : ''}" data-date="${ds}" tabindex="0">
+                <div class="cell ${ds === today ? 'today' : ''}" data-date="${ds}" tabindex="0">
                     <div class="cell-top">
                         <span class="dnum">${d.getDate()}</span>
                         ${holidaysOn(ds).map(h => `<span class="hol" title="${esc(COUNTRY_NAME[h.country] || h.country)}${h.name ? ' — ' + esc(h.name) : ''}">${esc(h.country)}</span>`).join('')}
@@ -368,7 +371,7 @@ document.getElementById('day-notes').addEventListener('focusout', async e => {
 // ---------- Events ----------
 document.getElementById('cal-body').addEventListener('click', e => {
     const cell = e.target.closest('.cell');
-    if (cell) openDay(cell.dataset.date);
+    if (cell && cell.dataset.date) openDay(cell.dataset.date);
 });
 document.getElementById('cal-body').addEventListener('keydown', e => {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('cell')) { e.preventDefault(); openDay(e.target.dataset.date); }
